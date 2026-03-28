@@ -1,0 +1,181 @@
+.ofertaBox {
+  background: var(--card);
+  border: 1px solid rgba(124, 92, 252, 0.3);
+  border-radius: 24px;
+  padding: 56px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.6s ease both;
+}
+
+.ofertaBox::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top, rgba(124, 92, 252, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.badge {
+  margin-bottom: 24px;
+  display: inline-block;
+}
+
+.title {
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 28px;
+  font-size: 15px;
+  position: relative;
+  z-index: 1;
+}
+
+.precoSection {
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 1;
+}
+
+.precoDe {
+  font-size: 16px;
+  color: var(--muted);
+  text-decoration: line-through;
+  margin-bottom: 4px;
+}
+
+.precoPor {
+  font-family: 'Syne', sans-serif;
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.precoPor sup {
+  font-size: 28px;
+  vertical-align: super;
+}
+
+.precoDesc {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+
+.ctaButton {
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.trustBadges {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.trustItem {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.garantia {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(6, 214, 160, 0.08);
+  border: 1px solid rgba(6, 214, 160, 0.2);
+  color: var(--accent3);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 100px;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .ofertaBox {
+    padding: 40px 32px;
+  }
+
+  .precoPor {
+    font-size: 48px;
+  }
+
+  .trustBadges {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ofertaBox {
+    padding: 32px 24px;
+    border-radius: 16px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .precoSection {
+    margin-bottom: 24px;
+  }
+
+  .precoPor {
+    font-size: 42px;
+  }
+
+  .precoPor sup {
+    font-size: 20px;
+  }
+
+  .trustBadges {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .trustItem {
+    justify-content: center;
+    white-space: normal;
+  }
+
+  .garantia {
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+}

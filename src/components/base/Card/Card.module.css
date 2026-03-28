@@ -1,0 +1,69 @@
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+/* DEFAULT VARIANT */
+.default {
+  border-radius: 16px;
+}
+
+.default:hover {
+  border-color: rgba(124, 92, 252, 0.3);
+  transform: translateY(-2px);
+}
+
+.default::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.default:hover::before {
+  opacity: 1;
+}
+
+/* NICHO VARIANT */
+.nicho {
+  border-radius: 14px;
+  padding: 22px 18px;
+  text-align: center;
+  cursor: default;
+}
+
+.nicho:hover {
+  border-color: rgba(124, 92, 252, 0.4);
+  background: rgba(124, 92, 252, 0.08);
+  transform: translateY(-3px);
+}
+
+/* TESTIMONIAL VARIANT */
+.testimonial {
+  border-radius: 16px;
+    padding: 28px;
+}
+
+.testimonial:hover {
+  border-color: rgba(124, 92, 252, 0.3);
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 20px;
+  }
+
+  .nicho {
+    padding: 16px 12px;
+  }
+}

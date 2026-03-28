@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PromptProBR — Prompts Profissionais para IA</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* GRID NOISE BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,92,252,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,92,252,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* GLOW ORBS */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb-1 { width: 600px; height: 600px; background: rgba(124,92,252,0.12); top: -200px; left: -200px; }
+  .orb-2 { width: 400px; height: 400px; background: rgba(6,214,160,0.07); bottom: 200px; right: -100px; }
+  .orb-3 { width: 300px; height: 300px; background: rgba(124,92,252,0.08); top: 60%; left: 40%; }
+
+  section, nav, footer { position: relative; z-index: 1; }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,15,0.85);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--accent2); }
+
+  .nav-badge {
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    color: var(--accent2);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 100px;
+    letter-spacing: 0.3px;
+  }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+  .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 100px 24px 80px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    color: var(--accent2);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    letter-spacing: 0.2px;
+  }
+  .hero-label::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent3);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px var(--accent3);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(38px, 6vw, 68px);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    margin-bottom: 24px;
+  }
+
+  h1 .highlight {
+    background: linear-gradient(135deg, var(--accent2) 0%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 580px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 32px rgba(124,92,252,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 48px rgba(124,92,252,0.5); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 12px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 24px 40px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .stat-num span { color: var(--accent2); }
+  .stat-label { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  .stat-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--border);
+  }
+
+  /* DOR SECTION */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+
+  .dor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .dor-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .dor-card:hover { border-color: rgba(124,92,252,0.3); transform: translateY(-2px); }
+  .dor-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .dor-card:hover::before { opacity: 1; }
+
+  .dor-icon {
+    width: 42px; height: 42px;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 18px;
+  }
+
+  .dor-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .dor-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* NICHOS SECTION */
+  .nichos-section {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nichos-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .nichos-header p { color: var(--muted); font-size: 17px; max-width: 500px; margin: 0 auto; }
+
+  .nichos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .nicho-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 18px;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .nicho-card:hover {
+    border-color: rgba(124,92,252,0.4);
+    background: rgba(124,92,252,0.08);
+    transform: translateY(-3px);
+  }
+
+  .nicho-emoji { font-size: 28px; margin-bottom: 10px; display: block; }
+
+  .nicho-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .nicho-count {
+    font-size: 12px;
+    color: var(--accent2);
+    font-weight: 500;
+  }
+
+  /* INCLUDES SECTION */
+  .includes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .includes-grid { grid-template-columns: 1fr; }
+  }
+
+  .include-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .include-item:last-child { border-bottom: none; }
+
+  .check-icon {
+    width: 24px; height: 24px;
+    background: rgba(6,214,160,0.15);
+    border: 1px solid rgba(6,214,160,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--accent3);
+    margin-top: 2px;
+  }
+
+  .include-text strong {
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .include-text span { font-size: 13px; color: var(--muted); }
+
+  /* DEPOIMENTOS */
+  .depo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .depo-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+  .depo-card:hover { border-color: rgba(124,92,252,0.3); }
+
+  .stars { color: #f59e0b; font-size: 14px; margin-bottom: 16px; letter-spacing: 2px; }
+
+  .depo-text {
+    font-size: 15px;
+    color: #c4c2d8;
+    line-height: 1.75;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .depo-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .av1 { background: rgba(124,92,252,0.25); color: var(--accent2); }
+  .av2 { background: rgba(6,214,160,0.2); color: var(--accent3); }
+  .av3 { background: rgba(251,146,60,0.2); color: #fb923c; }
+
+  .author-name { font-weight: 600; font-size: 14px; }
+  .author-role { font-size: 12px; color: var(--muted); }
+
+  /* OFERTA */
+  .oferta-box {
+    background: var(--card);
+    border: 1px solid rgba(124,92,252,0.3);
+    border-radius: 24px;
+    padding: 56px 48px;
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .oferta-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top, rgba(124,92,252,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .badge-urgencia {
+    display: inline-block;
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: #f87171;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 100px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .preco-de {
+    font-size: 16px;
+    color: var(--muted);
+    text-decoration: line-through;
+    margin-bottom: 4px;
+  }
+
+  .preco-por {
+    font-family: 'Syne', sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .preco-por sup { font-size: 28px; vertical-align: super; }
+
+  .preco-desc {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 36px;
+  }
+
+  .garantia-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(6,214,160,0.08);
+    border: 1px solid rgba(6,214,160,0.2);
+    color: var(--accent3);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 100px;
+    margin-top: 20px;
+  }
+
+  /* FAQ */
+  .faq-list {
+    max-width: 680px;
+    margin: 48px auto 0;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 0;
+  }
+
+  .faq-q {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .faq-q::before {
+    content: '+';
+    color: var(--accent2);
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: -1px;
+  }
+
+  .faq-a {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.75;
+    padding-left: 32px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer strong { color: var(--text); font-family: 'Syne', sans-serif; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero > * {
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero > *:nth-child(1) { animation-delay: 0.05s; }
+  .hero > *:nth-child(2) { animation-delay: 0.15s; }
+  .hero > *:nth-child(3) { animation-delay: 0.25s; }
+  .hero > *:nth-child(4) { animation-delay: 0.35s; }
+  .hero > *:nth-child(5) { animation-delay: 0.45s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .nav-badge { display: none; }
+    .hero { padding: 60px 20px 48px; }
+    .stats-bar { gap: 20px; }
+    .stat-divider { display: none; }
+    .oferta-box { padding: 36px 24px; }
+    .preco-por { font-size: 52px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Prompt<span>ProBR</span></div>
+  <div class="nav-badge">✦ +1.300 prompts profissionais</div>
+  <a href="https://www.asaas.com/c/ox4lity6xw9w4s3j" class="nav-cta">Quero acesso →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">Novo — Biblioteca completa de prompts para IA</div>
+  <h1>A IA não é fraca.<br>Você só não sabe como<br><span class="highlight">mandar ela trabalhar.</span></h1>
+  <p>Mais de 1.300 prompts profissionais, organizados por nicho, testados para entregar resultado de especialista sênior — não de estagiário.</p>
+  <div class="hero-ctas">
+    <a href="#oferta" class="btn-primary">Quero meus prompts agora →</a>
+    <a href="#nichos" class="btn-ghost">Ver todos os nichos</a>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">+1.300<span>+</span></div>
+    <div class="stat-label">Prompts profissionais</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-num">13</div>
+    <div class="stat-label">Nichos cobertos</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-num">7<span>dias</span></div>
+    <div class="stat-label">Garantia incondicional</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-num">R$97</div>
+    <div class="stat-label">Pagamento único</div>
+  </div>
+</div>
+
+<!-- DOR SECTION -->
+<section class="section">
+  <div class="section-label">O problema real</div>
+  <h2>Você usa IA todo dia.<br>E o resultado ainda parece mediano.</h2>
+  <div class="dor-grid">
+    <div class="dor-card">
+      <div class="dor-icon">⏱</div>
+      <h3>Horas perdidas reescrevendo</h3>
+      <p>Você passa mais tempo ajustando o que a IA gerou do que faria o trabalho na mão. O problema não é a ferramenta — é o prompt que você está usando.</p>
+    </div>
+    <div class="dor-card">
+      <div class="dor-icon">📋</div>
+      <h3>Prompts de internet que não funcionam</h3>
+      <p>Copia de grupo do Telegram, de thread do Twitter, de tutorial do YouTube. Testa no seu contexto. Não funciona. Você não sabe por quê.</p>
+    </div>
+    <div class="dor-card">
+      <div class="dor-icon">📉</div>
+      <h3>Resultado genérico, entrega rasa</h3>
+      <p>A IA responde como estagiário quando deveria responder como especialista sênior. A diferença está em como você instrui ela — não em qual IA você usa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NICHOS SECTION -->
+<div class="nichos-section" id="nichos">
+  <section class="section">
+    <div class="nichos-header">
+      <div class="section-label">O que está incluído</div>
+      <h2>13 coleções. Um por nicho.<br>Prontos para usar agora.</h2>
+      <p>Cada coleção tem entre 80 e 150 prompts organizados em subcategorias funcionais.</p>
+    </div>
+    <div class="nichos-grid">
+      <div class="nicho-card">
+        <span class="nicho-emoji">📱</span>
+        <div class="nicho-name">Marketing Digital</div>
+        <div class="nicho-count">120 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">💼</span>
+        <div class="nicho-name">Vendas</div>
+        <div class="nicho-count">100 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">💻</span>
+        <div class="nicho-name">Dev Web</div>
+        <div class="nicho-count">150 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">⌨️</span>
+        <div class="nicho-name">Programadores</div>
+        <div class="nicho-count">90 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">🎯</span>
+        <div class="nicho-name">Carreira</div>
+        <div class="nicho-count">80 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">📊</span>
+        <div class="nicho-name">Google Sheets</div>
+        <div class="nicho-count">85 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">🍽️</span>
+        <div class="nicho-name">Gastronomia</div>
+        <div class="nicho-count">90 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">🏥</span>
+        <div class="nicho-name">Saúde</div>
+        <div class="nicho-count">95 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">🎓</span>
+        <div class="nicho-name">Educação</div>
+        <div class="nicho-count">110 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">🎵</span>
+        <div class="nicho-name">Música</div>
+        <div class="nicho-count">80 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">🎨</span>
+        <div class="nicho-name">Artes com IA</div>
+        <div class="nicho-count">85 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">🎬</span>
+        <div class="nicho-name">Conteúdo</div>
+        <div class="nicho-count">120 prompts</div>
+      </div>
+      <div class="nicho-card">
+        <span class="nicho-emoji">📈</span>
+        <div class="nicho-name">Negócios</div>
+        <div class="nicho-count">100 prompts</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- INCLUDES SECTION -->
+<section class="section">
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="section-label">O que você recebe</div>
+    <h2>Tudo o que está<br>incluído no PromptProBR</h2>
+  </div>
+  <div style="max-width:900px;margin:48px auto 0;" class="includes-grid">
+    <div>
+      <div class="include-item">
+        <div class="check-icon">✓</div>
+        <div class="include-text">
+          <strong>+1.300 prompts organizados por nicho</strong>
+          <span>Cada prompt tem papel, contexto, tarefa, formato e restrição. Nenhum genérico.</span>
+        </div>
+      </div>
+      <div class="include-item">
+        <div class="check-icon">✓</div>
+        <div class="include-text">
+          <strong>Subcategorias funcionais por profissão</strong>
+          <span>Você abre, encontra o prompt certo e usa. Sem navegar em lista de 1.000 itens.</span>
+        </div>
+      </div>
+      <div class="include-item">
+        <div class="check-icon">✓</div>
+        <div class="include-text">
+          <strong>Guia de personalização em 3 passos</strong>
+          <span>Como adaptar qualquer prompt para o seu contexto específico em minutos.</span>
+        </div>
+      </div>
+      <div class="include-item">
+        <div class="check-icon">✓</div>
+        <div class="include-text">
+          <strong>Glossário de comandos avançados</strong>
+          <span>Os modificadores que fazem a IA mudar de nível na resposta. Sem precisar de curso.</span>
+        </div>
+      </div>
+      <div class="include-item">
+        <div class="check-icon">✓</div>
+        <div class="include-text">
+          <strong>Atualizações vitalícias</strong>
+          <span>Todo novo prompt adicionado à coleção chega para você automaticamente.</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(124,92,252,0.12) 0%,transparent 70%);pointer-events:none;"></div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:500;">Funciona com</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">
+        <div style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500;">
+          <span style="color:var(--accent3);">✓</span> ChatGPT (gratuito e Plus)
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500;">
+          <span style="color:var(--accent3);">✓</span> Claude (Anthropic)
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500;">
+          <span style="color:var(--accent3);">✓</span> Gemini (Google)
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500;">
+          <span style="color:var(--accent3);">✓</span> Copilot (Microsoft)
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:20px;font-size:13px;color:var(--muted);">Todos em português brasileiro. Testados e organizados.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="section" style="background:var(--bg2);max-width:100%;padding:80px 24px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label" style="text-align:center;">Depoimentos</div>
+    <h2 style="text-align:center;">Quem já usa o PromptProBR</h2>
+    <div class="depo-grid">
+      <div class="depo-card">
+        <div class="stars">★★★★★</div>
+        <p class="depo-text">"Eu usava ChatGPT todo dia e mesmo assim sentia que não estava aproveitando. Depois que peguei os prompts de marketing, o primeiro e-mail que escrevi com eles teve 34% de taxa de abertura. Nunca tinha passado de 18%."</p>
+        <div class="depo-author">
+          <div class="avatar av1">CR</div>
+          <div>
+            <div class="author-name">Camila R.</div>
+            <div class="author-role">Analista de Marketing Digital — São Paulo</div>
+          </div>
+        </div>
+      </div>
+      <div class="depo-card">
+        <div class="stars">★★★★★</div>
+        <p class="depo-text">"Sou dev há 8 anos e sempre achei que não precisava de 'prompt pronto'. Errei feio. Os prompts de debug e revisão de código mudaram meu fluxo de trabalho de um jeito que eu não esperava. Uso todo dia."</p>
+        <div class="depo-author">
+          <div class="avatar av2">RM</div>
+          <div>
+            <div class="author-name">Rafael M.</div>
+            <div class="author-role">Desenvolvedor Full Stack — Curitiba</div>
+          </div>
+        </div>
+      </div>
+      <div class="depo-card">
+        <div class="stars">★★★★★</div>
+        <p class="depo-text">"Professora há 12 anos. Passava o domingo inteiro planejando semana. Agora em duas horas eu tenho tudo — plano de aula, avaliação e feedback para os alunos. Sobrou tempo para a minha família."</p>
+        <div class="depo-author">
+          <div class="avatar av3">PL</div>
+          <div>
+            <div class="author-name">Patrícia L.</div>
+            <div class="author-role">Professora de Ensino Fundamental — BH</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFERTA -->
+<section class="section" id="oferta">
+  <div class="oferta-box">
+    <div class="badge-urgencia">⚡ Oferta por tempo limitado</div>
+    <h2 style="margin-bottom:8px;">Acesso Rápido Completo ao PromptProBR</h2>
+    <p style="color:var(--muted);margin-bottom:28px;font-size:15px;">13 coleções · +1.300 prompts · Acesso imediato</p>
+    <div class="preco-de">De R$ 97</div>
+    <div class="preco-por"><sup>R$</sup>29,90</div>
+    <div class="preco-desc">Pagamento único · Sem mensalidade · Acesso vitalício</div>
+    <a href="#" class="btn-primary" style="font-size:17px;padding:18px 40px;width:100%;justify-content:center;">
+      Quero meus prompts agora →
+    </a>
+    <div style="display:flex;gap:24px;justify-content:center;margin-top:20px;flex-wrap:wrap;">
+      <div style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;">🔒 Pagamento seguro</div>
+      <div style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;">⚡ Acesso em 5 minutos</div>
+      <div style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;">💳 Pix, cartão ou boleto</div>
+    </div>
+    <div class="garantia-badge">🛡 Garantia incondicional de 7 dias — 100% do dinheiro de volta</div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="max-width:800px;">
+  <div style="text-align:center;">
+    <div class="section-label">Dúvidas frequentes</div>
+    <h2>Perguntas e respostas</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">Funciona com o ChatGPT gratuito ou só com o Plus?</div>
+      <p class="faq-a">Funciona com ambos. A maioria dos prompts foi testada na versão gratuita. O resultado pode ser ainda melhor com o GPT-5.3, mas não é um requisito.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Já tenho alguns prompts que uso. Preciso mesmo disso?</div>
+      <p class="faq-a">Provavelmente seus prompts são bons para o que você já faz. A coleção tem valor para expandir o uso para tarefas que você ainda não está delegando para a IA. Se abrir e achar que o que tem é equivalente, a garantia de 7 dias cobre você.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Os prompts são em português ou inglês?</div>
+      <p class="faq-a">Todos em português brasileiro. Testados para funcionar com IAs em português, sem necessidade de tradução.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">É um curso? Preciso assistir aula?</div>
+      <p class="faq-a">Não. É uma biblioteca de prompts prontos para usar. Você abre, encontra o prompt que precisa, cola no ChatGPT e usa. Nenhuma aula para assistir, nenhum módulo para completar.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Funciona para outras IAs além do ChatGPT?</div>
+      <p class="faq-a">Sim. Os prompts funcionam com qualquer IA de texto de qualidade — Claude, Gemini, Copilot. Foram desenvolvidos e testados principalmente com ChatGPT, mas a estrutura é compatível com qualquer modelo de linguagem avançado.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section style="text-align:center;padding:60px 24px;border-top:1px solid var(--border);position:relative;z-index:1;">
+  <h2 style="margin-bottom:16px;">Pronto para parar de<br><span class="highlight">desperdiçar a IA?</span></h2>
+  <p style="color:var(--muted);margin-bottom:32px;">Acesso imediato. Garantia de 7 dias. Sem risco.</p>
+  <a href="#oferta" class="btn-primary" style="font-size:16px;padding:16px 36px;">Quero meus prompts agora →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>PromptProBR</strong> · Todos os direitos reservados · promptprobr.com.br<br>
+  <span style="margin-top:8px;display:block;">Dúvidas? matrainer4@gmail.com</span>
+</footer>
+
+</body>
+</html>
