@@ -13,6 +13,7 @@ import {
   FooterCTA,
   Footer,
 } from './components/sections';
+import { ExitIntentPopup } from './components/ExitIntentPopup/ExitIntentPopup';
 import './styles/global.css';
 
 /**
@@ -39,6 +40,8 @@ function App() {
       </main>
 
       <Footer />
+
+      <ExitIntentPopup />
     </>
   );
 }

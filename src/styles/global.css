@@ -90,6 +90,29 @@ a {
   }
 }
 
+/* Ajustes para evitar que conteúdo qbre o layout nas seções com esses seletores */
+.section_1kd5w_1,
+.dark_1kd5w_9 {
+  background-color: var(--bg3); /* fundo escuro */
+  color: var(--text); /* texto claro */
+  max-width: 100%;
+  width: 100%;
+  padding: 2rem 1.25rem;
+  margin: 0 auto;
+  text-align: center;
+  overflow-wrap: break-word; /* quebra correta de palavras */
+  word-wrap: break-word; /* compatibilidade extra */
+  hyphens: auto; /* hifenização se suportado */
+}
+
+
+.section_1kd5w_1 > *,
+.dark_1kd5w_9 > * {
+  max-width: 95ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* RESPONSIVE */
 @media (max-width: 600px) {
   body {
@@ -102,5 +125,16 @@ a {
 
   h2 {
     font-size: clamp(20px, 3.5vw, 32px);
+  }
+
+  .section_1kd5w_1,
+  .dark_1kd5w_9 {
+    padding: 1.5rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .section_1kd5w_1 > *,
+  .dark_1kd5w_9 > * {
+    max-width: 100%;
   }
 }
