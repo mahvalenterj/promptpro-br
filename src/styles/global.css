@@ -1,6 +1,2 @@
-.section_1kd5w_1,
-.dark_1kd5w_9 {
-  text-align: center;  /* ← centraliza TUDO, inclusive o Hero */
-  max-width: 100%;
-  padding: 2rem 1.25rem;
-}
+/* Removido: text-align: center centralizava todo o conteúdo */
+/* Usar text-align na seção Hero especificamente, não globalmente */
