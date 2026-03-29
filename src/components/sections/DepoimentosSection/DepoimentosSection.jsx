@@ -19,15 +19,16 @@ export const DepoimentosSection = () => {
           </h2>
         </div>
 
-        <div className={styles.depoGrid}>
-          {depoimentos.map((depo) => (
-            <Card
-              key={depo.id}
-              variant="testimonial"
-              className={styles.depoCard}
-              role="article"
-              aria-label={`Depoimento de ${depo.author}`}
-            >
+        <div className={styles.centeredGrid}>
+          <div className={styles.depoGrid}>
+            {depoimentos.map((depo) => (
+              <Card
+                key={depo.id}
+                variant="testimonial"
+                className={styles.depoCard}
+                role="article"
+                aria-label={`Depoimento de ${depo.author}`}
+              >
               <div className={styles.stars} aria-label={`${depo.stars} estrelas`}>
                 {'★'.repeat(depo.stars)}
               </div>
@@ -45,6 +46,7 @@ export const DepoimentosSection = () => {
               </div>
             </Card>
           ))}
+        </div>
         </div>
       </Container>
     </Section>

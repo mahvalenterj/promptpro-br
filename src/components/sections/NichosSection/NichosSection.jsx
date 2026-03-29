@@ -24,18 +24,20 @@ export const NichosSection = () => {
           </p>
         </div>
 
-        <div className={styles.nichosGrid}>
-          {nichos.map((nicho) => (
-            <Card key={nicho.name} variant="nicho">
-              <div className={styles.emoji} aria-hidden="true">
-                {nicho.emoji}
-              </div>
-              <div className={styles.nichoCa}>
-                <div className={styles.name}>{nicho.name}</div>
-                <div className={styles.count}>{nicho.count} prompts</div>
-              </div>
-            </Card>
-          ))}
+        <div className={styles.centeredGrid}>
+          <div className={styles.nichosGrid}>
+            {nichos.map((nicho) => (
+              <Card key={nicho.name} variant="nicho">
+                <div className={styles.emoji} aria-hidden="true">
+                  {nicho.emoji}
+                </div>
+                <div className={styles.nichoCa}>
+                  <div className={styles.name}>{nicho.name}</div>
+                  <div className={styles.count}>{nicho.count} prompts</div>
+                </div>
+              </Card>
+            ))}
+          </div>
         </div>
       </Container>
     </Section>
