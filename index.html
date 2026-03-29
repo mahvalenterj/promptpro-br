@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PromptProBR — Pacote de Prompts Profissionais</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--bg2:#111118;--bg3:#16161f;--card:#1a1a24;--border:rgba(255,255,255,0.07);--accent:#7c5cfc;--accent2:#a78bfa;--accent3:#06d6a0;--silver:#CBD5E1;--text:#f0eeff;--muted:#8b8aa0;--red:#ef4444;--tag-bg:rgba(124,92,252,0.15);--tag-border:rgba(124,92,252,0.3)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(124,92,252,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,252,0.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+.orb-1{width:600px;height:600px;background:rgba(124,92,252,0.12);top:-200px;left:-200px}
+.orb-2{width:400px;height:400px;background:rgba(6,214,160,0.07);bottom:200px;right:-100px}
+.orb-3{width:300px;height:300px;background:rgba(124,92,252,0.08);top:60%;left:40%}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid var(--border);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);position:sticky;top:0;background:rgba(10,10,15,0.85);z-index:100}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text)}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent3));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:14px;font-weight:900;color:#fff;flex-shrink:0}
+.logo span{color:var(--accent2)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-link{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s;background:none;border:none;cursor:pointer;font-family:inherit}
+.nav-link:hover{color:var(--text)}
+.nav-cta{background:var(--accent);color:#fff;font-weight:600;font-size:14px;padding:10px 22px;border-radius:10px;text-decoration:none;transition:opacity .2s,transform .2s;border:none;cursor:pointer;font-family:inherit;display:inline-block}
+.nav-cta:hover{opacity:.88;transform:translateY(-1px)}
+.nav-back{color:var(--muted);font-size:14px;font-weight:500;background:none;border:none;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-back:hover{color:var(--accent2)}
+
+/* PAGES */
+.page{display:none;position:relative;z-index:1}
+.page.active{display:block}
+
+/* HERO */
+.hero{text-align:center;padding:100px 24px 80px;max-width:900px;margin:0 auto}
+.hero-label{display:inline-flex;align-items:center;gap:8px;background:var(--tag-bg);border:1px solid var(--tag-border);color:var(--accent2);font-size:13px;font-weight:500;padding:7px 16px;border-radius:100px;margin-bottom:32px;letter-spacing:.2px}
+.hero-dot{width:6px;height:6px;background:var(--accent3);border-radius:50%;display:inline-block;box-shadow:0 0 8px var(--accent3);animation:pulse-dot 2s infinite;flex-shrink:0}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,66px);font-weight:800;line-height:1.08;letter-spacing:-1.5px;margin-bottom:24px}
+.highlight{background:linear-gradient(135deg,var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:18px;color:var(--muted);max-width:580px;margin:0 auto 40px;line-height:1.7}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:56px}
+.btn-primary{background:var(--accent);color:#fff;font-weight:600;font-size:15px;padding:14px 28px;border-radius:14px;text-decoration:none;transition:all .2s;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 0 32px rgba(124,92,252,.35);font-family:inherit}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 48px rgba(124,92,252,.5)}
+.btn-ghost{background:transparent;color:var(--muted);font-weight:500;font-size:15px;padding:14px 28px;border-radius:14px;text-decoration:none;border:1px solid var(--border);transition:all .2s;display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:inherit}
+.btn-ghost:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+
+/* STATS BAR */
+.stats-bar{display:flex;align-items:center;justify-content:center;gap:40px;padding:24px 40px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:26px;font-weight:700}
+.stat-num span{color:var(--accent2)}
+.stat-label{font-size:13px;color:var(--muted);margin-top:2px}
+.stat-divider{width:1px;height:36px;background:var(--border)}
+
+/* SECTIONS */
+.section{max-width:1100px;margin:0 auto;padding:80px 24px}
+.section-label{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);margin-bottom:16px}
+h2{font-family:'Syne',sans-serif;font-size:clamp(26px,4vw,42px);font-weight:700;letter-spacing:-.8px;line-height:1.15;margin-bottom:20px}
+.bg2-wrap{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+
+/* VIDEO */
+.video-section{max-width:900px;margin:0 auto;padding:80px 24px;text-align:center}
+.video-sub{color:var(--silver);font-size:15px;margin-bottom:40px}
+.video-border{padding:3px;border-radius:20px;background:linear-gradient(90deg,var(--accent3),var(--accent),var(--silver),var(--accent3));background-size:300% 100%;animation:shimmer-border 3s linear infinite}
+@keyframes shimmer-border{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.video-inner{border-radius:18px;background:#0d0d16;overflow:hidden;position:relative;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.video-overlay-text{position:absolute;top:16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:var(--silver);font-size:12px;font-weight:500;padding:6px 14px;border-radius:100px;white-space:nowrap;backdrop-filter:blur(8px)}
+.video-play-btn{width:80px;height:80px;background:rgba(124,92,252,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(124,92,252,.5);transition:transform .2s,background .2s}
+.video-inner:hover .video-play-btn{transform:scale(1.1);background:var(--accent)}
+.video-caption{margin-top:20px;font-size:14px;color:var(--muted);font-style:italic}
+
+/* DOR */
+.dor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:48px}
+.dor-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.dor-card:hover{border-color:rgba(124,92,252,.3);transform:translateY(-2px)}
+.dor-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .3s}
+.dor-card:hover::before{opacity:1}
+.dor-icon{width:44px;height:44px;background:var(--tag-bg);border:1px solid var(--tag-border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
+.dor-card h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:10px}
+.dor-card p{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* NICHOS */
+.nichos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.nicho-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 24px;transition:all .3s;cursor:pointer;text-decoration:none;display:block;color:var(--text)}
+.nicho-card:hover{border-color:rgba(124,92,252,.4);transform:translateY(-4px);box-shadow:0 12px 40px rgba(124,92,252,.12)}
+.nicho-icon{font-size:40px;margin-bottom:16px;display:block}
+.nicho-name{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:6px}
+.nicho-desc{font-size:13px;color:var(--silver);line-height:1.6;margin-bottom:14px}
+.nicho-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.nicho-count{font-size:12px;color:var(--muted)}
+.nicho-price{font-size:12px;font-weight:700;color:var(--accent3);background:rgba(6,214,160,.1);border:1px solid rgba(6,214,160,.2);padding:3px 10px;border-radius:100px}
+.nicho-cta{margin-top:16px;font-size:13px;font-weight:600;color:var(--accent2);display:flex;align-items:center;gap:4px}
+
+/* INCLUDES */
+.includes-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.include-item{display:flex;align-items:flex-start;gap:16px;padding:20px 0;border-bottom:1px solid var(--border)}
+.include-item:last-child{border-bottom:none}
+.check-icon{width:24px;height:24px;background:rgba(6,214,160,.15);border:1px solid rgba(6,214,160,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;color:var(--accent3);margin-top:2px}
+.include-text strong{display:block;font-weight:600;font-size:15px;margin-bottom:4px}
+.include-text span{font-size:13px;color:var(--muted)}
+.compat-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;position:relative;overflow:hidden}
+.compat-box::before{content:'';position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(124,92,252,.12) 0%,transparent 70%);pointer-events:none}
+.compat-item{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500;margin-bottom:12px}
+
+/* PRICE CARDS */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.price-card{border-radius:20px;padding:32px 28px;position:relative;overflow:hidden;transition:transform .2s}
+.price-card::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);background-size:200% 100%;animation:shimmer 2.5s linear infinite;pointer-events:none}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.price-card:hover{transform:translateY(-4px)}
+.pc-basico{background:var(--card);border:1px solid rgba(124,92,252,.3)}
+.pc-inter{background:linear-gradient(145deg,#1a1030,#0f1a2e);border:2px solid var(--accent);box-shadow:0 0 40px rgba(124,92,252,.2)}
+.pc-completo{background:linear-gradient(145deg,#141820,#0a0f18);border:1px solid var(--silver)}
+.off-tag{display:inline-block;background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+.popular-badge{display:inline-block;background:rgba(124,92,252,.25);border:1px solid var(--accent);color:var(--accent2);font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;text-transform:uppercase;margin-bottom:8px;display:block}
+.card-name{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px}
+.preco-de{font-size:15px;color:var(--muted);text-decoration:line-through;margin-bottom:2px}
+.preco-por{font-family:'Syne',sans-serif;font-size:52px;font-weight:800;line-height:1;letter-spacing:-2px;margin-bottom:4px}
+.preco-por sup{font-size:22px;vertical-align:super;letter-spacing:0}
+.preco-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.price-color-1{color:var(--text)}
+.price-color-2{color:var(--accent2)}
+.price-color-3{color:var(--silver)}
+.price-list{list-style:none;margin-bottom:28px;display:flex;flex-direction:column;gap:10px}
+.price-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px}
+.pcheck-g{color:var(--accent3);flex-shrink:0;margin-top:1px}
+.pcheck-p{color:var(--accent2);flex-shrink:0;margin-top:1px}
+.pcheck-s{color:var(--silver);flex-shrink:0;margin-top:1px}
+.btn-pc{display:block;width:100%;text-align:center;font-weight:700;font-size:14px;padding:14px;border-radius:12px;text-decoration:none;transition:all .2s;border:none;cursor:pointer;font-family:inherit}
+.btn-pc-1{background:var(--accent);color:#fff}
+.btn-pc-1:hover{box-shadow:0 0 24px rgba(124,92,252,.4);transform:translateY(-1px)}
+.btn-pc-2{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.btn-pc-2:hover{box-shadow:0 0 32px rgba(124,92,252,.5);transform:translateY(-1px)}
+.btn-pc-3{background:linear-gradient(135deg,var(--silver),#94a3b8);color:#0a0a0f}
+.btn-pc-3:hover{box-shadow:0 0 24px rgba(203,213,225,.3);transform:translateY(-1px)}
+.card-note{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+.security-bar{text-align:center;margin-top:32px;font-size:14px;color:var(--muted)}
+
+/* DEPOIMENTOS */
+.depo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:48px}
+.depo-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;transition:border-color .2s}
+.depo-card:hover{border-color:rgba(124,92,252,.3)}
+.stars{color:#f59e0b;font-size:14px;margin-bottom:16px;letter-spacing:2px}
+.depo-text{font-size:15px;color:#c4c2d8;line-height:1.75;margin-bottom:24px;font-style:italic}
+.depo-author{display:flex;align-items:center;gap:14px}
+.avatar-frame{width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--accent);position:relative}
+.avatar-frame img{width:100%;height:100%;object-fit:cover;object-position:center top;transform:scale(1.15)}
+.author-name{font-weight:600;font-size:14px}
+.author-role{font-size:12px;color:var(--muted)}
+
+/* FAQ */
+.faq-list{max-width:720px;margin:48px auto 0}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-btn{width:100%;text-align:left;padding:22px 0;font-family:'Syne',sans-serif;font-weight:600;font-size:16px;color:var(--text);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:14px;transition:color .2s}
+.faq-btn:hover{color:var(--accent2)}
+.faq-toggle{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--tag-bg);border:1px solid var(--tag-border);display:flex;align-items:center;justify-content:center;color:var(--accent2);font-size:16px;transition:transform .3s,background .2s;line-height:1}
+.faq-toggle.open{transform:rotate(45deg);background:rgba(124,92,252,.3)}
+.faq-answer{font-size:14px;color:var(--muted);line-height:1.8;padding-left:38px;max-height:0;overflow:hidden;transition:max-height .35s ease,opacity .3s,padding .3s;opacity:0;padding-bottom:0}
+.faq-answer.open{max-height:300px;opacity:1;padding-bottom:22px}
+
+/* CTA FINAL */
+.cta-final{background:linear-gradient(135deg,#0d0a1f,#0a0f1f,#060d14);border-top:1px solid var(--border);text-align:center;padding:100px 24px;position:relative}
+.cta-final::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(124,92,252,.08),transparent 70%);pointer-events:none}
+.cta-final h2{margin-bottom:20px;font-size:clamp(32px,5vw,52px);position:relative}
+.cta-final p{color:var(--muted);font-size:17px;margin-bottom:40px;position:relative}
+.wpp-txt-link{display:block;margin-top:20px;font-size:14px;color:var(--muted);text-decoration:none;transition:color .2s}
+.wpp-txt-link:hover{color:var(--accent3)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:48px 24px 32px;text-align:center;color:var(--muted);font-size:13px}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--text);margin-bottom:16px}
+.footer-logo span{color:var(--accent2)}
+.footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:color .2s}
+.footer-links a:hover{color:var(--accent2)}
+
+/* WHATSAPP FLOAT */
+.wpp-float{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;z-index:999;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);animation:wpp-ring 2.5s infinite}
+.wpp-float:hover .wpp-tooltip{opacity:1;transform:translateX(0)}
+.wpp-tooltip{position:absolute;right:68px;white-space:nowrap;background:#1a1a24;color:#fff;font-size:13px;font-weight:500;padding:8px 14px;border-radius:10px;opacity:0;transform:translateX(8px);transition:all .2s;pointer-events:none;border:1px solid var(--border)}
+@keyframes wpp-ring{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,.4)}50%{box-shadow:0 0 0 10px rgba(37,211,102,0)}}
+
+/* EXIT POPUP */
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.popup-box{background:var(--bg3);border:1px solid rgba(124,92,252,.3);border-radius:24px;padding:44px 40px;max-width:480px;width:100%;position:relative;text-align:center;animation:scaleIn .3s ease}
+@keyframes scaleIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.popup-close{position:absolute;top:16px;right:16px;background:var(--card);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:color .2s;font-size:16px;line-height:1}
+.popup-close:hover{color:var(--text)}
+.popup-badge{display:inline-block;background:rgba(6,214,160,.15);border:1px solid rgba(6,214,160,.3);color:var(--accent3);font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;margin-bottom:20px}
+.popup-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px;line-height:1.2}
+.popup-sub{color:var(--muted);font-size:14px;margin-bottom:28px}
+.popup-ebook{width:140px;height:180px;margin:0 auto 28px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent3));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#fff;line-height:1.3;box-shadow:0 8px 32px rgba(124,92,252,.3);position:relative;overflow:hidden}
+.popup-ebook::before{content:'';position:absolute;inset:0;background:linear-gradient(45deg,transparent 30%,rgba(255,255,255,.1) 50%,transparent 70%);animation:shimmer 2s linear infinite}
+.btn-popup-main{display:block;width:100%;background:linear-gradient(135deg,var(--accent),var(--accent3));color:#fff;font-weight:700;font-size:15px;padding:16px;border-radius:14px;text-decoration:none;margin-bottom:12px;transition:all .2s;border:none;cursor:pointer;font-family:inherit}
+.btn-popup-main:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,92,252,.4)}
+.btn-popup-sec{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;transition:color .2s;padding:8px;font-family:inherit}
+.btn-popup-sec:hover{color:var(--text)}
+
+/* NICHO PAGE */
+.nicho-hero{text-align:center;padding:80px 24px 60px;max-width:800px;margin:0 auto}
+.nicho-prompts-wrap{max-width:900px;margin:0 auto;padding:0 24px 80px}
+.prompts-grid{display:grid;gap:12px;margin-top:32px}
+.prompt-row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s}
+.prompt-row:hover{border-color:rgba(124,92,252,.3)}
+.prompt-num{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--accent2);min-width:28px;margin-top:2px;flex-shrink:0}
+.prompt-text{font-size:14px;color:var(--muted);line-height:1.6}
+.prompt-text strong{color:var(--text);display:block;margin-bottom:2px}
+.nicho-cta-box{text-align:center;margin-top:48px;padding:40px;background:var(--card);border-radius:20px;border:1px solid var(--border)}
+
+/* FADE UP ANIMATION */
+.fade-up{animation:fadeUp .6s ease both}
+.d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nichos-grid{grid-template-columns:repeat(2,1fr)}
+  .price-grid{grid-template-columns:1fr;max-width:440px;margin-left:auto;margin-right:auto}
+  .includes-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  nav{padding:14px 16px}
+  .nav-links{display:none}
+  .hero{padding:60px 20px 48px}
+  .stats-bar{gap:20px;padding:20px 16px}
+  .stat-divider{display:none}
+  .popup-box{padding:32px 20px}
+  .nichos-grid{grid-template-columns:1fr}
+  .price-grid{max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- ═══════════════════════════════════ LANDING PAGE ═══════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <nav id="nav-home">
+    <a href="#" class="logo" onclick="showPage('home');return false;">
+      <div class="logo-icon">&gt;_</div>
+      Prompt<span>ProBR</span>
+    </a>
+    <div class="nav-links">
+      <button class="nav-link" onclick="scrollTo('nichos')">Nichos</button>
+      <button class="nav-link" onclick="scrollTo('como-funciona')">Como Funciona</button>
+      <button class="nav-link" onclick="scrollTo('depoimentos')">Depoimentos</button>
+      <button class="nav-link" onclick="scrollTo('precos')">Preços</button>
+    </div>
+    <button class="nav-cta" onclick="scrollTo('precos')">Ver Pacotes →</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-label fade-up d1"><span class="hero-dot"></span> Novo — Pacote de Prompts Profissionais por nicho</div>
+    <h1 class="fade-up d2">A IA não é fraca.<br>Você só não sabe como<br><span class="highlight">mandar ela trabalhar.</span></h1>
+    <p class="hero-sub fade-up d3">Mais de 800 prompts profissionais, organizados por nicho, testados para entregar resultado de especialista sênior — não de estagiário.</p>
+    <div class="hero-ctas fade-up d4">
+      <button class="btn-primary" onclick="scrollTo('precos')">Escolher meu pacote →</button>
+      <button class="btn-ghost" onclick="scrollTo('nichos')">Ver os nichos ↓</button>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num">800<span>+</span></div><div class="stat-label">Prompts profissionais</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">Nichos especializados</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-num">R$<span>29,90</span></div><div class="stat-label">por nicho — acesso imediato</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-num"><span>★</span> 5.0</div><div class="stat-label">Avaliação dos clientes</div></div>
+  </div>
+
+  <!-- DOR -->
+  <section class="section" id="como-funciona">
+    <div class="section-label">O problema</div>
+    <h2>Por que a IA te dá resultado de <span class="highlight">estagiário</span></h2>
+    <div class="dor-grid">
+      <div class="dor-card">
+        <div class="dor-icon">😤</div>
+        <h3>Prompt genérico = resultado genérico</h3>
+        <p>Você digita uma frase qualquer e a IA te entrega algo vago que você não pode usar. Não é culpa da IA — é culpa do prompt.</p>
+      </div>
+      <div class="dor-card">
+        <div class="dor-icon">⏱️</div>
+        <h3>Horas perdidas ajustando resposta ruim</h3>
+        <p>Você pede, ajusta, pede de novo, ajusta mais. Uma tarefa de 10 minutos vira 40 minutos de frustração sem resultado concreto.</p>
+      </div>
+      <div class="dor-card">
+        <div class="dor-icon">🤷</div>
+        <h3>Não sabe o que pedir nem como pedir</h3>
+        <p>A IA pode fazer tudo — mas você não sabe quais comandos usar. É como ter um especialista sênior e pedir para ele varrer o chão.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <div class="bg2-wrap">
+    <div class="video-section">
+      <div class="section-label">Demonstração</div>
+      <h2>Veja o que acontece quando você usa o prompt <span style="color:var(--red)">ERRADO</span> — e o <span class="highlight">CERTO</span></h2>
+      <p class="video-sub">Tela real • Quarto escuro • Resultado em tempo real</p>
+      <div style="max-width:800px;margin:0 auto">
+        <div class="video-border">
+          <!-- SUBSTITUIR src="" pelo link do vídeo (YouTube embed ou mp4) -->
+          <div class="video-inner" onclick="alert('Substitua este placeholder pelo seu vídeo: cole o embed do YouTube ou a tag <video> com src do mp4.')">
+            <div class="video-overlay-text">Tela real • Quarto escuro • Resultado em tempo real</div>
+            <div class="video-play-btn">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="white" style="margin-left:4px"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="video-caption">Uma pessoa real. Um prompt errado. Depois o certo. Veja a diferença.</p>
+    </div>
+  </div>
+
+  <!-- NICHOS -->
+  <div id="nichos" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="section">
+      <div style="text-align:center;margin-bottom:56px">
+        <div class="section-label" style="text-align:center">Pacotes por nicho</div>
+        <h2 style="text-align:center">Escolha o pacote do seu nicho — <span class="highlight">R$ 29,90 cada</span></h2>
+        <p style="color:var(--silver);font-size:17px;max-width:500px;margin:8px auto 0">Cada nicho tem sua própria página com os prompts completos. Clique para explorar.</p>
+      </div>
+      <div class="nichos-grid" id="nichos-grid"></div>
+    </div>
+  </div>
+
+  <!-- INCLUDES -->
+  <section class="section">
+    <div style="max-width:900px;margin:0 auto">
+      <div class="section-label">O que você recebe</div>
+      <h2>Tudo incluído no <span class="highlight">PromptProBR</span></h2>
+    </div>
+    <div style="max-width:900px;margin:48px auto 0" class="includes-grid">
+      <div>
+        <div class="include-item"><div class="check-icon">✓</div><div class="include-text"><strong>+800 prompts organizados por nicho</strong><span>Cada prompt tem papel, contexto, tarefa, formato e restrição. Nenhum genérico.</span></div></div>
+        <div class="include-item"><div class="check-icon">✓</div><div class="include-text"><strong>Subcategorias funcionais por profissão</strong><span>Você abre, encontra o prompt certo e usa. Sem navegar em lista de 1.000 itens.</span></div></div>
+        <div class="include-item"><div class="check-icon">✓</div><div class="include-text"><strong>Acesso imediato por link</strong><span>Após o pagamento você recebe o link na hora. Sem espera, sem cadastro complicado.</span></div></div>
+        <div class="include-item"><div class="check-icon">✓</div><div class="include-text"><strong>Suporte via WhatsApp</strong><span>Equipe disponível para ajudar com qualquer dúvida sobre como usar seus prompts.</span></div></div>
+        <div class="include-item"><div class="check-icon">✓</div><div class="include-text"><strong>Atualizações incluídas</strong><span>Todo novo prompt adicionado à coleção do seu nicho chega para você automaticamente.</span></div></div>
+      </div>
+      <div class="compat-box">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:500">Funciona com</div>
+        <div class="compat-item"><span style="color:var(--accent3)">✓</span> ChatGPT (gratuito e Plus)</div>
+        <div class="compat-item"><span style="color:var(--accent3)">✓</span> Claude (Anthropic)</div>
+        <div class="compat-item"><span style="color:var(--accent3)">✓</span> Gemini (Google)</div>
+        <div class="compat-item"><span style="color:var(--accent3)">✓</span> Copilot (Microsoft)</div>
+        <div style="border-top:1px solid var(--border);padding-top:20px;margin-top:8px;font-size:13px;color:var(--muted)">Todos em português brasileiro. Testados e organizados.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREÇOS -->
+  <div id="precos" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <section class="section">
+      <div style="text-align:center">
+        <div class="section-label">Preços</div>
+        <h2>Escolha seu pacote — <span class="highlight">e comece hoje</span></h2>
+        <p style="color:var(--muted);font-size:16px">Três opções para você entrar no nível que faz sentido agora.</p>
+      </div>
+      <div class="price-grid">
+
+        <!-- BÁSICO -->
+        <div class="price-card pc-basico">
+          <div class="off-tag">72% OFF</div>
+          <div class="card-name">Básico</div>
+          <div class="preco-de">De R$ 79,00</div>
+          <div class="preco-por price-color-1"><sup>R$</sup>29,90</div>
+          <div class="preco-sub">por 1 nicho da sua escolha</div>
+          <ul class="price-list">
+            <li><span class="pcheck-g">✓</span>+100 prompts nicho escolhido</li>
+            <li><span class="pcheck-g">✓</span>Acesso imediato por link</li>
+            <li><span class="pcheck-g">✓</span>Suporte via WhatsApp</li>
+          </ul>
+          <a href="https://pay.infinitepay.io/marianna-correa/VC1DLTItSQ-7YNP8pR5HH-29,90" target="_blank" class="btn-pc btn-pc-1">Escolher meu nicho →</a>
+          <div class="card-note">Escolha 1 nicho após o pagamento</div>
+        </div>
+
+        <!-- INTERMEDIÁRIO -->
+        <div class="price-card pc-inter">
+          <div class="popular-badge">⭐ MAIS POPULAR</div>
+          <div class="off-tag">62% OFF</div>
+          <div class="card-name">Intermediário</div>
+          <div class="preco-de">De R$ 129,00</div>
+          <div class="preco-por price-color-2"><sup>R$</sup>49,90</div>
+          <div class="preco-sub">Marketing + Vendas + Google Sheets</div>
+          <ul class="price-list">
+            <li><span class="pcheck-p">✓</span>260+ prompts em 3 nichos</li>
+            <li><span class="pcheck-p">✓</span>Foco em produtividade de negócios</li>
+            <li><span class="pcheck-p">✓</span>Acesso imediato por link</li>
+            <li><span class="pcheck-p">✓</span>Atualizações inclusas</li>
+            <li><span class="pcheck-p">✓</span>Suporte via WhatsApp por 7 dias</li>
+          </ul>
+          <a href="https://pay.infinitepay.io/marianna-correa/VC1DLTUtSQ-wWZB1TnhV-49,90" target="_blank" class="btn-pc btn-pc-2">Quero o Intermediário →</a>
+        </div>
+
+        <!-- COMPLETO -->
+        <div class="price-card pc-completo">
+          <div class="off-tag">68% OFF</div>
+          <div class="card-name">Guia Completo</div>
+          <div class="preco-de">De R$ 299,00</div>
+          <div class="preco-por price-color-3"><sup>R$</sup>97</div>
+          <div class="preco-sub">Todos os 800+ prompts • 9 nichos completos</div>
+          <ul class="price-list">
+            <li><span class="pcheck-s">✓</span>800+ prompts — todos os nichos</li>
+            <li><span class="pcheck-s">✓</span>Marketing, Vendas, Dev, Programação, Saúde, Gastronomia, Educação, Sheets, Carreira</li>
+            <li><span class="pcheck-s">✓</span>Acesso vitalício</li>
+            <li><span class="pcheck-s">✓</span>Todas as atualizações futuras</li>
+            <li><span class="pcheck-s">✓</span>Suporte VIP via WhatsApp</li>
+            <li><span class="pcheck-s">✓</span>Bônus: Surpresa 🎁</li>
+          </ul>
+          <a href="https://pay.infinitepay.io/marianna-correa/VC1DLUEtSQ-3m6J0QTEvr-97,00" target="_blank" class="btn-pc btn-pc-3">Quero o Guia Completo →</a>
+        </div>
+
+      </div>
+      <div class="security-bar">🔒 Pagamento 100% seguro &nbsp;•&nbsp; ⚡ Acesso imediato &nbsp;•&nbsp; 💬 Suporte via WhatsApp</div>
+    </section>
+  </div>
+
+  <!-- DEPOIMENTOS -->
+  <div id="depoimentos" class="bg2-wrap">
+    <section class="section">
+      <div style="text-align:center">
+        <div class="section-label">Depoimentos</div>
+        <h2>Quem já usa o <span class="highlight">PromptProBR</span></h2>
+      </div>
+      <div class="depo-grid">
+        <div class="depo-card">
+          <div class="stars">★★★★★</div>
+          <p class="depo-text">"Eu usava ChatGPT todo dia e mesmo assim sentia que não estava aproveitando. Depois que peguei os prompts de marketing, o primeiro e-mail que escrevi com eles teve 34% de taxa de abertura. Nunca tinha passado de 18%."</p>
+          <div class="depo-author">
+            <div class="avatar-frame"><img src="camila.jpg" alt="Camila R."></div>
+            <div><div class="author-name">Camila R.</div><div class="author-role">Analista de Marketing Digital — São Paulo</div></div>
+          </div>
+        </div>
+        <div class="depo-card">
+          <div class="stars">★★★★★</div>
+          <p class="depo-text">"Sou dev há 8 anos e sempre achei que não precisava de 'prompt pronto'. Errei feio. Os prompts de debug e revisão de código mudaram meu fluxo de trabalho de um jeito que eu não esperava. Uso todo dia."</p>
+          <div class="depo-author">
+            <div class="avatar-frame" style="border-color:var(--accent3)"><img src="rafael.jpg" alt="Rafael M."></div>
+            <div><div class="author-name">Rafael M.</div><div class="author-role">Desenvolvedor Full Stack — Curitiba</div></div>
+          </div>
+        </div>
+        <div class="depo-card">
+          <div class="stars">★★★★★</div>
+          <p class="depo-text">"Professora há 12 anos. Passava o domingo inteiro planejando semana. Agora em duas horas eu tenho tudo — plano de aula, avaliação e feedback para os alunos. Sobrou tempo para a minha família."</p>
+          <div class="depo-author">
+            <div class="avatar-frame" style="border-color:var(--silver)"><img src="patricia.jpg" alt="Patrícia L."></div>
+            <div><div class="author-name">Patrícia L.</div><div class="author-role">Professora de Ensino Fundamental — BH</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- FAQ -->
+  <section class="section" style="max-width:800px">
+    <div style="text-align:center">
+      <div class="section-label">Dúvidas frequentes</div>
+      <h2>Tire suas <span class="highlight">dúvidas</span></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)"><span class="faq-toggle">+</span>Funciona com o ChatGPT gratuito ou só com o Plus?</button>
+        <div class="faq-answer">Funciona com ambos. A maioria dos prompts foi testada na versão gratuita. O resultado pode ser ainda melhor com modelos pagos, mas não é requisito.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)"><span class="faq-toggle">+</span>Já tenho alguns prompts que uso. Preciso mesmo disso?</button>
+        <div class="faq-answer">Provavelmente seus prompts são bons para o que você já faz. A coleção tem valor para expandir o uso para tarefas que você ainda não está delegando para a IA. Se abrir e achar que o que tem é equivalente, pode falar com a gente.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)"><span class="faq-toggle">+</span>Os prompts são em português ou inglês?</button>
+        <div class="faq-answer">Todos em português brasileiro. Testados para funcionar com IAs em português, sem necessidade de tradução.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)"><span class="faq-toggle">+</span>É um curso? Preciso assistir aula?</button>
+        <div class="faq-answer">Não. É uma biblioteca de prompts prontos para usar. Você abre, encontra o prompt que precisa, cola no ChatGPT e usa. Nenhuma aula para assistir, nenhum módulo para completar.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)"><span class="faq-toggle">+</span>Funciona para outras IAs além do ChatGPT?</button>
+        <div class="faq-answer">Sim. Os prompts funcionam com qualquer IA de texto de qualidade — Claude, Gemini, Copilot. Foram desenvolvidos e testados principalmente com ChatGPT, mas a estrutura é compatível com qualquer modelo de linguagem avançado.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)"><span class="faq-toggle">+</span>Como recebo após o pagamento?</button>
+        <div class="faq-answer">Assim que o pagamento é confirmado, você recebe o link de acesso imediatamente. Sem espera, sem cadastro complicado. Caso tenha qualquer dúvida, o suporte via WhatsApp está disponível.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <div class="cta-final">
+    <h2>Chega de resultado de estagiário.<br><span class="highlight">Comece hoje.</span></h2>
+    <p>Você está a um prompt de distância de resultados profissionais.</p>
+    <button class="btn-primary" style="font-size:17px;padding:18px 40px" onclick="scrollTo('precos')">Quero meu Pacote Agora →</button>
+    <a href="https://wa.me/5521965737988" target="_blank" class="wpp-txt-link">ou fale direto no WhatsApp →</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Prompt<span>ProBR</span></div>
+    <div class="footer-links">
+      <a href="#">Política de Privacidade</a>
+      <a href="#">Termos de Uso</a>
+      <a href="https://wa.me/5521965737988" target="_blank">Contato WhatsApp</a>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--muted)">© 2025 PromptProBR — Todos os direitos reservados.</div>
+    <div style="margin-top:4px;font-size:12px;color:var(--muted)">Desenvolvido por especialistas em Inteligência Artificial</div>
+  </footer>
+
+</div><!-- /page-home -->
+
+<!-- ═══════════════════════════════════ NICHO PAGE ═══════════════════════════════════ -->
+<div id="page-nicho" class="page">
+
+  <nav id="nav-nicho">
+    <a href="#" class="logo" onclick="showPage('home');return false;">
+      <div class="logo-icon">&gt;_</div>
+      Prompt<span>ProBR</span>
+    </a>
+    <button class="nav-back" onclick="showPage('home')">← Ver todos os pacotes</button>
+    <button class="nav-cta" onclick="showPage('home');setTimeout(()=>scrollTo('precos'),300)">Ver Pacotes →</button>
+  </nav>
+
+  <div class="nicho-hero">
+    <div class="hero-label" id="nicho-badge"><span class="hero-dot"></span> <span id="nicho-badge-text"></span></div>
+    <h1 id="nicho-h1" style="font-size:clamp(30px,5vw,52px)"></h1>
+    <p class="hero-sub" id="nicho-dor"></p>
+    <a id="nicho-cta-top" href="#" target="_blank" class="btn-primary" style="font-size:16px;padding:16px 32px"></a>
+  </div>
+
+  <div class="nicho-prompts-wrap">
+    <div style="margin-bottom:24px">
+      <div class="section-label">Prévia dos prompts</div>
+      <h2>Veja o que você recebe</h2>
+      <p id="nicho-count-text" style="color:var(--muted);font-size:15px"></p>
+    </div>
+    <div class="prompts-grid" id="prompts-grid"></div>
+    <div class="nicho-cta-box">
+      <div class="off-tag">72% OFF</div>
+      <h2 style="margin-bottom:8px;font-size:26px" id="nicho-cta-box-title"></h2>
+      <p style="color:var(--muted);margin-bottom:28px">Acesso imediato por link após o pagamento • Suporte via WhatsApp</p>
+      <div style="font-size:14px;color:var(--muted);text-decoration:line-through;margin-bottom:4px">De R$ 79,00</div>
+      <div style="font-family:'Syne',sans-serif;font-size:52px;font-weight:800;line-height:1;margin-bottom:20px"><sup style="font-size:22px;vertical-align:super">R$</sup>29,90</div>
+      <a id="nicho-cta-bottom" href="https://pay.infinitepay.io/marianna-correa/VC1DLTEtSQ-1G256EnvoL-29,90" target="_blank" class="btn-primary" style="font-size:16px;padding:16px 36px;display:inline-flex">Quero estes prompts — R$ 29,90 →</a>
+      <p style="color:var(--muted);font-size:12px;margin-top:12px">🔒 Pagamento 100% seguro • Acesso imediato</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">Prompt<span>ProBR</span></div>
+    <div class="footer-links">
+      <a href="#">Política de Privacidade</a>
+      <a href="#">Termos de Uso</a>
+      <a href="https://wa.me/5521965737988" target="_blank">Contato WhatsApp</a>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--muted)">© 2025 PromptProBR — Todos os direitos reservados.</div>
+  </footer>
+
+</div><!-- /page-nicho -->
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/5521965737988" target="_blank" class="wpp-float" aria-label="WhatsApp">
+  <span class="wpp-tooltip">Fale com a gente</span>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- EXIT POPUP -->
+<div id="exit-popup" style="display:none">
+  <div class="popup-overlay" onclick="if(event.target===this)closePopup()">
+    <div class="popup-box">
+      <button class="popup-close" onclick="closePopup()">✕</button>
+      <div class="popup-badge">🎁 ESPERA! Presente para você</div>
+      <h2 class="popup-title">Baixe grátis: Ebook com<br>100+ Inteligências Artificiais</h2>
+      <p class="popup-sub">Um guia completo com as melhores IAs do mercado — curadoria feita por especialistas</p>
+      <div class="popup-ebook">
+        <span style="font-size:40px">🤖</span>
+        <span>100+ IAs<br>que você<br>precisa conhecer</span>
+      </div>
+      <a href="https://wa.me/5521965737988?text=Quero%20meu%20Download%20Gr%C3%A1tis%20do%20Ebook%20100%2B%20IAs" target="_blank" class="btn-popup-main">Quero meu Download Grátis →</a>
+      <button class="btn-popup-sec" onclick="closePopup()">Não, obrigado — prefiro continuar sem o presente</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── NICHOS DATA ───────────────────────────────────────────────────
+const NICHOS = [
+  {
+    id:'marketing', name:'Marketing Digital', icon:'📣',
+    desc:'Campanhas, copies, estratégias e conteúdo que converte.',
+    count:100,
+    dor:'Você passa horas criando copies e campanhas que não convertem — e sente que a IA não entende o seu nicho.',
+    prompts:[
+      {title:'Copy para anúncio Facebook',text:'Crie um anúncio para Facebook Ads com hook, corpo e CTA para [produto/serviço] voltado para [público-alvo], com variação A/B.'},
+      {title:'E-mail de boas-vindas',text:'Escreva um e-mail de boas-vindas para novos inscritos na newsletter de [empresa], tom [amigável/profissional], com CTA para [ação].'},
+      {title:'Calendário editorial 30 dias',text:'Monte um calendário editorial para Instagram com 30 posts para [nicho], incluindo tipo de conteúdo e horário sugerido.'},
+      {title:'Script para Reels',text:'Crie um script de 30 segundos para Reels sobre [tema], com hook nos primeiros 3 segundos e CTA no final.'},
+      {title:'Análise de concorrente',text:'Analise o posicionamento de marca de [concorrente] e sugira como diferenciar [minha marca] no mercado.'},
+      {title:'Landing page de captação',text:'Escreva o copy completo de uma landing page para captar leads oferecendo [isca digital] para [público].'},
+      {title:'Sequência de e-mails',text:'Crie uma sequência de 5 e-mails de nurturing para leads que baixaram [ebook] de [empresa], com intervalo sugerido entre cada um.'},
+      {title:'Bio otimizada para Instagram',text:'Reescreva minha bio do Instagram para [nicho] usando palavras-chave relevantes e CTA claro. Bio atual: [colar bio].'},
+      {title:'Headline para blog',text:'Gere 10 opções de headline irresistível para um artigo sobre [tema] voltado para [público].'},
+      {title:'Estratégia de lançamento',text:'Monte uma estratégia de lançamento de produto para [produto], incluindo pré-lançamento, lançamento e pós-venda.'},
+    ]
+  },
+  {
+    id:'vendas', name:'Vendas', icon:'📈',
+    desc:'Scripts, objeções, follow-up e fechamento de alto impacto.',
+    count:100,
+    dor:'Você perde vendas para objeções que não sabe responder e seu follow-up é fraco demais.',
+    prompts:[
+      {title:'Script de abertura fria',text:'Crie um script de abordagem fria por telefone para [produto/serviço], com abertura de atenção nos primeiros 10 segundos.'},
+      {title:"Resposta à objeção 'caro'",text:"Me dê 5 respostas profissionais para a objeção 'está muito caro' vendendo [produto] por R$ [valor]."},
+      {title:'Follow-up por WhatsApp',text:'Escreva 3 mensagens de follow-up para clientes que pediram orçamento há [X dias] e não responderam.'},
+      {title:'Proposta comercial',text:'Estruture uma proposta comercial para [empresa cliente] contratando [serviço], incluindo dores, solução, investimento e próximos passos.'},
+      {title:'E-mail de reativação',text:'Escreva um e-mail para reativar clientes inativos há [X meses] com oferta especial de [produto/serviço].'},
+      {title:'Pitch de elevator',text:'Crie um pitch de 60 segundos para [produto/serviço] voltado para [perfil de cliente], para ser dito em uma reunião de negócios.'},
+      {title:'Contra-argumento concorrência',text:'Me dê argumentos para quando o cliente diz que vai pesquisar no concorrente [nome], vendendo [produto].'},
+      {title:'Roteiro de demo',text:'Crie um roteiro para demonstração de [produto/serviço] de 20 minutos focado em conversão.'},
+      {title:'Fechamento de venda',text:'Me dê 5 técnicas de fechamento adaptadas para vender [produto] de [valor] com decisão no momento.'},
+      {title:'LinkedIn outreach',text:'Escreva uma mensagem de prospecção no LinkedIn para [cargo] de [segmento], oferecendo [solução], sem soar vendedor.'},
+    ]
+  },
+  {
+    id:'programacao', name:'Programação', icon:'💻',
+    desc:'Debug, funções, revisão de código e documentação técnica.',
+    count:100,
+    dor:'Você gasta horas debugando código, escrevendo documentação entediante ou pedindo ajuda para bugs simples.',
+    prompts:[
+      {title:'Debug de código',text:'Analise o seguinte código [colar código] e identifique todos os bugs, explicando a causa e a correção de cada um.'},
+      {title:'Refatoração de função',text:'Refatore esta função [colar código] para melhorar legibilidade, performance e seguir boas práticas de [linguagem].'},
+      {title:'Documentação de API',text:'Gere documentação completa em formato Markdown para esta API: [colar endpoints], incluindo exemplos de requisição e resposta.'},
+      {title:'Revisão de código',text:'Faça uma code review detalhada deste trecho [colar código], apontando problemas de segurança, performance e manutenibilidade.'},
+      {title:'Gerador de testes unitários',text:'Escreva testes unitários completos para esta função [colar código] usando [Jest/Pytest/etc], cobrindo casos de borda.'},
+      {title:'Otimização de query SQL',text:'Analise e otimize esta query SQL [colar query] para melhorar performance, sugerindo índices se necessário.'},
+      {title:'Explicação de algoritmo',text:'Explique como funciona [algoritmo] com um exemplo prático em [linguagem], do jeito mais claro possível.'},
+      {title:'Converter pseudocódigo',text:'Converta este pseudocódigo [colar] para [linguagem] funcional, bem comentado e seguindo boas práticas.'},
+      {title:'Identificar code smells',text:'Identifique todos os code smells neste arquivo [colar código] e sugira as refatorações apropriadas.'},
+      {title:'README profissional',text:'Gere um README.md completo e profissional para este projeto: [descrever projeto], incluindo instalação, uso e contribuição.'},
+    ]
+  },
+  {
+    id:'dev-web', name:'Desenvolvimento Web', icon:'🌐',
+    desc:'HTML, CSS, React, APIs, WordPress e muito mais.',
+    count:148,
+    dor:'Você demora horas para criar componentes, configurar projetos e resolver problemas comuns de frontend e backend.',
+    prompts:[
+      {title:'Componente React acessível',text:'Crie um componente React de [tipo] totalmente acessível (ARIA), responsivo, com TypeScript e Tailwind CSS.'},
+      {title:'Hook customizado',text:'Crie um custom hook React chamado [nome] que [funcionalidade], com tipagem TypeScript e tratamento de erros.'},
+      {title:'Layout CSS Grid complexo',text:'Implemente este layout [descrever] usando CSS Grid puro, responsivo para mobile, tablet e desktop.'},
+      {title:'Integração de API REST',text:'Escreva o código para integrar a API [nome/endpoint] em [React/Vue/etc], com loading state, error handling e cache.'},
+      {title:'Configuração Next.js',text:'Configure um projeto Next.js 14 com App Router, TypeScript, Tailwind, autenticação com [NextAuth/Clerk] e banco [Prisma].'},
+      {title:'Animação CSS avançada',text:'Crie uma animação CSS pura para [efeito desejado] sem JavaScript, otimizada para performance.'},
+      {title:'Schema de banco de dados',text:'Projete um schema de banco de dados para [aplicação], incluindo relações, índices e considerações de escalabilidade.'},
+      {title:'Configuração de CORS',text:'Configure CORS corretamente em um servidor [Express/FastAPI/etc] para aceitar requisições de [domínios].'},
+      {title:'SEO técnico completo',text:'Gere todas as meta tags, structured data e configurações de SEO para uma página de [tipo] sobre [tema].'},
+      {title:'Performance audit',text:'Analise este código [colar] e liste todas as otimizações de performance possíveis, do mais ao menos impactante.'},
+    ]
+  },
+  {
+    id:'curriculo', name:'Currículo e Carreira', icon:'💼',
+    desc:'CV irresistível, LinkedIn, entrevistas e posicionamento.',
+    count:80,
+    dor:'Você manda currículo e não tem retorno, ou chega na entrevista e trava na hora de se vender.',
+    prompts:[
+      {title:'Reescrita de currículo',text:'Reescreva este currículo [colar] com linguagem orientada a resultados e palavras-chave de ATS para a vaga de [cargo] em [empresa].'},
+      {title:'Carta de apresentação',text:'Escreva uma carta de apresentação para a vaga de [cargo] na [empresa], destacando [experiência] e alinhamento cultural.'},
+      {title:'Otimização de LinkedIn',text:'Reescreva meu headline e summary do LinkedIn para me posicionar como [cargo-alvo] no segmento de [área].'},
+      {title:'Preparação para entrevista',text:'Me prepare para a entrevista de [cargo] na [empresa], com as 10 perguntas mais prováveis e respostas usando o método STAR.'},
+      {title:"Resposta 'fale sobre você'",text:"Crie um pitch profissional de 2 minutos para responder 'fale sobre você' na entrevista de [cargo], destacando meus diferenciais: [listar]."},
+      {title:'Negociação salarial',text:'Me dê um script para negociar salário de [valor atual] para [valor desejado] em uma oferta de emprego para [cargo].'},
+      {title:'E-mail pós-entrevista',text:'Escreva um e-mail de follow-up para enviar 24h após a entrevista de [cargo] na [empresa], reforçando interesse.'},
+      {title:'Descrição de projeto no CV',text:'Transforme esta descrição vaga de projeto [colar] em bullet points de impacto com métricas para o currículo.'},
+      {title:'Personal branding LinkedIn',text:'Crie uma estratégia de personal branding no LinkedIn para [profissional de área] que quer ser reconhecido como autoridade em [X].'},
+      {title:'Plano de transição de carreira',text:'Me ajude a montar um plano de transição de [área atual] para [área desejada], incluindo habilidades e como posicionar no CV.'},
+    ]
+  },
+  {
+    id:'google-sheets', name:'Google Sheets', icon:'📊',
+    desc:'Fórmulas, automações, dashboards e análise de dados.',
+    count:60,
+    dor:'Você perde tempo com planilhas manuais e não sabe criar fórmulas que realmente automatizem o trabalho.',
+    prompts:[
+      {title:'Fórmula de busca avançada',text:'Crie uma fórmula Google Sheets para buscar [valor] na coluna [A] de outra aba e retornar [coluna B], tratando erros com IFERROR.'},
+      {title:'Dashboard de vendas',text:'Monte a estrutura de um dashboard de vendas no Google Sheets com gráficos, KPIs e filtros dinâmicos por período.'},
+      {title:'Validação de dados personalizada',text:'Crie regras de validação de dados para uma planilha de cadastro de [clientes/produtos], com mensagens de erro personalizadas.'},
+      {title:'Script Google Apps',text:'Escreva um Google Apps Script para automatizar [tarefa] na planilha, rodando [gatilho: a cada X horas / ao editar].'},
+      {title:'Formatação condicional avançada',text:'Configure regras de formatação condicional para destacar [condição] nas células, com escala de cores para [métrica].'},
+      {title:'Tabela dinâmica avançada',text:'Explique como criar uma tabela dinâmica para analisar [dados] e mostre as configurações para [tipo de análise desejada].'},
+      {title:'Fórmula de previsão',text:'Crie uma fórmula para prever [métrica] dos próximos 3 meses baseado nos dados históricos das colunas [A:B].'},
+      {title:'Importação automática de dados',text:'Escreva a fórmula IMPORTXML ou IMPORTRANGE para trazer dados de [URL/outra planilha] automaticamente.'},
+      {title:'Relatório automático semanal',text:'Crie um template de relatório semanal automático que consolide dados de múltiplas abas e envie por e-mail via Apps Script.'},
+      {title:'Limpeza e padronização de dados',text:'Me dê um passo a passo com fórmulas para limpar e padronizar dados de [fonte] com inconsistências de [tipo].'},
+    ]
+  },
+  {
+    id:'gastronomia', name:'Gastronomia', icon:'👨‍🍳',
+    desc:'Receitas, cardápios, fichas técnicas e gestão de restaurante.',
+    count:60,
+    dor:'Você passa horas criando cardápios, fichas técnicas e conteúdo para redes sociais do seu negócio gastronômico.',
+    prompts:[
+      {title:'Ficha técnica completa',text:'Crie uma ficha técnica para o prato [nome], com ingredientes em gramas, modo de preparo, custo por porção e sugestão de preço de venda.'},
+      {title:'Cardápio sazonal',text:'Monte um cardápio sazonal para [estação] com [X] entradas, [X] pratos principais e [X] sobremesas usando ingredientes da época.'},
+      {title:'Receita com substituições',text:'Reescreva esta receita [nome] com substituições para [vegano/sem glúten/sem lactose], mantendo sabor e textura originais.'},
+      {title:'Descrição irresistível de cardápio',text:'Escreva descrições irresistíveis para os pratos [listar], para o cardápio de um restaurante [estilo], tom [elegante/casual].'},
+      {title:'Controle de estoque',text:'Crie um plano de controle de estoque semanal para um restaurante de [X] refeições/dia, com pontos de reposição automática.'},
+      {title:'Post Instagram gastronômico',text:'Crie 5 ideias de post para Instagram de um restaurante [tipo], com caption, hashtags e sugestão de visual para cada um.'},
+      {title:'Manual de atendimento',text:'Escreva um manual de atendimento para garçons de [tipo de restaurante], cobrindo recepção, sugestão e finalização da experiência.'},
+      {title:'Precificação de pratos',text:'Me ajude a calcular o preço de venda justo para um prato com custo de insumos de R$ [X] em um restaurante com [perfil].'},
+      {title:'Cardápio digital QR Code',text:'Estruture um cardápio completo em formato texto otimizado para ser convertido em cardápio digital QR Code para [tipo de restaurante].'},
+      {title:'Resposta a review negativo',text:'Escreva uma resposta profissional e empática para esta avaliação negativa de restaurante: [colar review].'},
+    ]
+  },
+  {
+    id:'saude', name:'Saúde', icon:'🏥',
+    desc:'Conteúdo, orientações e comunicação para profissionais de saúde.',
+    count:60,
+    dor:'Você é profissional de saúde e perde tempo demais criando conteúdo educativo, relatórios e comunicações para pacientes.',
+    prompts:[
+      {title:'Conteúdo educativo Instagram',text:'Crie um carrossel de 7 slides sobre [tema de saúde] para Instagram, em linguagem acessível ao paciente leigo, sem alarmismo.'},
+      {title:'Explicação de diagnóstico',text:'Escreva uma explicação simplificada de [diagnóstico] para um paciente de [perfil], incluindo o que esperar e como lidar.'},
+      {title:'E-mail de acompanhamento',text:'Escreva um e-mail de acompanhamento pós-consulta para um paciente com [condição], reforçando orientações e próximos passos.'},
+      {title:'Post de conscientização',text:'Crie um post para conscientização sobre [tema: prevenção/doença/hábito] para o mês de [mês], com dados e CTA claro.'},
+      {title:'Relatório de caso clínico',text:'Estruture um relatório de caso clínico para [condição], cobrindo anamnese, exame físico, hipóteses e conduta.'},
+      {title:'FAQ para site de clínica',text:'Crie 10 perguntas e respostas frequentes para o site de uma clínica de [especialidade], em linguagem simples e tranquilizadora.'},
+      {title:'Orientação nutricional simplificada',text:'Escreva orientações alimentares simplificadas para um paciente com [condição], em formato de lista prática e sem jargões.'},
+      {title:'Script de anamnese',text:'Crie um roteiro de anamnese estruturada para primeira consulta de [especialidade], com perguntas essenciais e de aprofundamento.'},
+      {title:'Newsletter de saúde mensal',text:'Escreva uma newsletter mensal para pacientes de uma clínica de [especialidade], com dica de saúde, artigo e informativo.'},
+      {title:'Resposta a pergunta sensível',text:'Escreva uma resposta empática e profissional para um paciente que perguntou sobre [tema sensível] nas redes sociais da clínica.'},
+    ]
+  },
+  {
+    id:'educacao', name:'Educação', icon:'🎓',
+    desc:'Planos de aula, avaliações, conteúdo didático e comunicação escolar.',
+    count:60,
+    dor:'Você passa o domingo planejando a semana inteira — e ainda tem provas, relatórios e comunicados para preparar.',
+    prompts:[
+      {title:'Plano de aula completo',text:'Crie um plano de aula completo sobre [tema] para [série/ano], com objetivos, metodologia, recursos, desenvolvimento e avaliação.'},
+      {title:'Avaliação diferenciada',text:'Elabore uma avaliação sobre [conteúdo] para [série] com 5 questões objetivas, 3 dissertativas e 1 questão criativa.'},
+      {title:'Atividade lúdica',text:'Crie uma atividade lúdica para ensinar [conteúdo] para alunos de [faixa etária], usando [dinâmica/jogo/brincadeira].'},
+      {title:'Feedback construtivo para aluno',text:'Escreva um feedback construtivo e motivador para um aluno que [situação: não entregou/teve dificuldade com] [conteúdo].'},
+      {title:'Comunicado para pais',text:'Escreva um comunicado para os pais/responsáveis sobre [assunto escolar], em tom profissional mas acolhedor.'},
+      {title:'Adaptação para NEE',text:'Adapte esta atividade [colar] para um aluno com [necessidade educacional especial], mantendo o objetivo de aprendizagem.'},
+      {title:'Rubrica de avaliação',text:'Crie uma rubrica de avaliação para [trabalho/apresentação/projeto] com critérios claros e níveis de desempenho (1 a 4).'},
+      {title:'Projeto interdisciplinar',text:'Proponha um projeto interdisciplinar envolvendo [matérias] para [série], com tema central [tema] e produto final [tipo].'},
+      {title:'Roteiro de estudos',text:'Monte um roteiro de estudos para o aluno se preparar para [prova/ENEM/concurso] em [X semanas], cobrindo [conteúdos].'},
+      {title:'Dinâmica de revisão',text:'Crie uma dinâmica de revisão engajante para a aula antes da prova de [matéria/conteúdo] para turma do [ano/série].'},
+    ]
+  }
+];
+
+// ── RENDER NICHO CARDS ──────────────────────────────────────────────
+(function renderNichos() {
+  const grid = document.getElementById('nichos-grid');
+  NICHOS.forEach(n => {
+    const a = document.createElement('a');
+    a.href = '#';
+    a.className = 'nicho-card';
+    a.innerHTML = `
+      <span class="nicho-icon">${n.icon}</span>
+      <div class="nicho-name">${n.name}</div>
+      <div class="nicho-desc">${n.desc}</div>
+      <div class="nicho-meta">
+        <span class="nicho-count">${n.count} prompts</span>
+        <span class="nicho-price">R$ 29,90</span>
+      </div>
+      <div class="nicho-cta">Explorar prompts →</div>`;
+    a.addEventListener('click', (e) => { e.preventDefault(); openNicho(n.id); });
+    grid.appendChild(a);
+  });
+})();
+
+// ── PAGE ROUTING ────────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function openNicho(id) {
+  const n = NICHOS.find(x => x.id === id);
+  if (!n) return;
+
+  // Badge
+  document.getElementById('nicho-badge-text').textContent = `${n.count} prompts profissionais • ${n.name}`;
+
+  // H1
+  document.getElementById('nicho-h1').innerHTML = `${n.icon} Prompts de <span class="highlight">${n.name}</span> que entregam resultado`;
+
+  // Dor
+  document.getElementById('nicho-dor').textContent = n.dor;
+
+  // CTA top
+  const ctaTop = document.getElementById('nicho-cta-top');
+  ctaTop.textContent = `Quero os prompts de ${n.name} — R$ 29,90 →`;
+  ctaTop.href = 'https://pay.infinitepay.io/marianna-correa/VC1DLTEtSQ-1G256EnvoL-29,90';
+
+  // CTA box title
+  document.getElementById('nicho-cta-box-title').textContent = `+ ${n.count - n.prompts.length} prompts exclusivos no pacote completo`;
+
+  // CTA bottom
+  document.getElementById('nicho-cta-bottom').textContent = `Quero os prompts de ${n.name} — R$ 29,90 →`;
+
+  // Count text
+  document.getElementById('nicho-count-text').textContent = `Mostrando ${n.prompts.length} de ${n.count} prompts incluídos no pacote.`;
+
+  // Prompts grid
+  const grid = document.getElementById('prompts-grid');
+  grid.innerHTML = '';
+  n.prompts.forEach((p, i) => {
+    const row = document.createElement('div');
+    row.className = 'prompt-row';
+    row.innerHTML = `<div class="prompt-num">#${String(i+1).padStart(2,'0')}</div><div class="prompt-text"><strong>${p.title}</strong>${p.text}</div>`;
+    grid.appendChild(row);
+  });
+
+  showPage('nicho');
+}
+
+// ── SCROLL HELPER ───────────────────────────────────────────────────
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── FAQ ─────────────────────────────────────────────────────────────
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const toggle = btn.querySelector('.faq-toggle');
+  const isOpen = answer.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-toggle').forEach(t => t.classList.remove('open'));
+
+  if (!isOpen) {
+    answer.classList.add('open');
+    toggle.classList.add('open');
+  }
+}
+
+// ── EXIT POPUP ──────────────────────────────────────────────────────
+function closePopup() {
+  document.getElementById('exit-popup').style.display = 'none';
+}
+
+(function initExitPopup() {
+  if (sessionStorage.getItem('exitShown')) return;
+  function handleLeave(e) {
+    if (e.clientY <= 0) {
+      document.getElementById('exit-popup').style.display = 'flex';
+      sessionStorage.setItem('exitShown', '1');
+      document.removeEventListener('mouseleave', handleLeave);
+    }
+  }
+  setTimeout(() => document.addEventListener('mouseleave', handleLeave), 5000);
+})();
+</script>
+</body>
+</html>
